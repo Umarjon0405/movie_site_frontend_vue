@@ -1,0 +1,147 @@
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+.container1{
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 2%;
+    background-color: rgb(252, 206, 2);
+    
+}
+.header{
+    width:100%;
+    border-bottom: 2px solid rgb(100, 99, 99);
+}
+.logo-div{
+    display: flex;
+    align-items: center;
+}
+.logo-span{
+    font-family: Impact, calibri, 'Arial Narrow Bold', sans-serif;
+    font-size: 30px;
+    color: rgb(100, 99, 99);
+}
+.nav-bar{
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-bar a{
+    color: rgb(100, 99, 99) !important;
+    border: 1px solid rgb(100, 99, 99);
+    padding: 5px 20px;
+    margin: 2px;
+    align-items: center;
+    display: flex;
+    font-weight: 700;
+}
+.home{
+    margin: 0 auto;
+    max-width: 1400px;
+}
+.nav-bar a:hover{
+    color: whitesmoke !important;
+    background-color: rgb(100, 99, 99);
+    box-shadow: 2px 1px 10px whitesmoke;
+    padding: 5px 20px;
+    margin: 2px;
+    align-items: center;
+    display: flex;
+}
+
+/* slider side */
+
+.container2{
+    padding: 50px 15%;
+    background-color: rgb(100, 99, 99);
+}
+.slider{
+    
+}
+
+/****************************************/
+/****************************************/
+/************sliders style start*********/
+/****************************************/
+/****************************************/
+/****************************************/
+/* container3 */
+.container3{
+    padding: 50px 15%;
+    background-color:rgb(252, 206, 2)
+}
+.footer{
+    padding: 30px 15%;
+    background-color: rgb(100, 99, 99);
+}
+.logo-span-footer{
+    font-family: Impact, calibri, 'Arial Narrow Bold', sans-serif;
+    font-size: 20px;
+    color: rgb(252, 206, 2);
+}
+.footer-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.copyright{
+    margin-left: 20px !important;
+    color: rgb(252, 206, 2);
+}
+.add-title{
+    align-items: center;
+    text-align: center;
+    font-weight: 800;
+    font-size: 30px;
+    color: rgb(252, 206, 2);
+}
+.all-title{
+    text-align: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 30px;
+    color: rgb(100, 99, 99);
+}
+.headTitle{
+    font-weight: 500 !important;
+    font-size: 20px;
+}
+/* for update action icon */
+.btn-action-update{
+    margin: 10px 10px !important;
+}
+.btn-action-update:hover{
+    background-color: rgb(255, 199, 115) !important;
+}
+.btn-action-update:hover .update-action-icon{
+    color: rgb(255, 8, 0) !important;
+}
+
+/* for delete action icon */
+
+.btn-action-delete{
+    margin: 10px 10px !important;
+}
+.btn-action-delete:hover{
+    background-color: rgb(255, 115, 115) !important;
+}
+.btn-action-delete:hover .delete-action-icon{
+    color: rgb(66, 52, 52) !important;
+}
+
+/* log out btn */
+.log-out-btn:hover{
+    background-color: aliceblue !important;
+    color: red !important;
+}
+.log-out-btn:hover #log-out-icon{
+    color: red;
+}
+
+/* admin movie */
+.menu-tab{
+    margin:0 auto !important;
+}
