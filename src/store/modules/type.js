@@ -65,7 +65,7 @@ const actions = {
     async fetchActiveTypes({ commit },) {
         try {
             const type = await axios.get(`/types/get_active`)
-            commit('SET_TYPES', type)
+            commit('SET_ACTIVE_TYPES', type)
             return Promise.resolve(type)
         } catch (error) {
             return Promise.reject(error)
@@ -77,7 +77,7 @@ const mutations = {
     SET_TYPES: (state, types) => {
         state.types.data = types.data
     },
-    SET_TYPES: (state, types) => {
+    SET_ACTIVE_TYPES: (state, types) => {
         state.activeTypes.data = types.data
     }
 }

@@ -1,6 +1,6 @@
 <template>
    <v-container class="video-play-div" fullscreen fluid>
-    <div width="100%" class="main-card" :style="bgImage">
+    <div width="100%" class="main-card py-5" :style="bgImage">
         <div class="container1 fluid">
           <div class="header">
             <v-row class="nav-row">
@@ -206,10 +206,14 @@ export default {
   methods: {},
   computed: {
     bgImage() {
-      return {
-        "background-image": `url('${this.img_url + this.movie.image_path}')`,
-        "--height": this.height + "px",
-      };
+      let style = `
+          background-image: url('${this.img_url + this.movie.image_path}');
+          background-size: cover;
+          background-position: center;
+        `
+        console.log(style);
+      return style;
+      
     },
     ...mapGetters({
       movie: "movies/getMovieToPlay",
@@ -256,11 +260,13 @@ export default {
   background-color: rgb(100, 99, 99) !important;
   color: whitesmoke !important;
   float: left;
+  
 }
 .movie-descrption-title {
   background-color: rgb(100, 99, 99) !important;
   color: whitesmoke !important;
   float: left;
+  
 }
 #container {
   width: 70%;
