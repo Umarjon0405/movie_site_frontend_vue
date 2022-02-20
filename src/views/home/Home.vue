@@ -4,64 +4,81 @@
     <v-container fluid class="header-container">
         <div class="container1 fluid">
           <div class="header">
-            <v-row class="nav-row">
-              <v-col cols="2">
+            
                 <div class="logo-div">
-                  <v-img
+                  
+                    <v-img
                     src="../../assets/abstract-cinema-logo-FF3FCB96BB-seeklogo.com.png"
                     max-width="40px"
                   ></v-img>
                   <div class="pl-4">
                     <span class="logo-span">CinemaTV</span>
+                  
                   </div>
-                </div>
-              </v-col>
-              <v-col cols="7 d-flex" justify-space-between>
-                <div class="nav-bar">
-                  <a>
-                    <span>Home</span>
-                  </a>
-                  <a>
-                    <span>Serials</span>
-                  </a>
-                  <a>
-                    <span>Anime</span>
-                  </a>
-                </div>
-              </v-col>
-              <v-col cols="3 d-flex" justify-space-between>
-                <v-text-field
-                  outlined
-                  append-icon="mdi-movie-search-outline"
-                  dense
-                  label="search"
-                  placeholder="search"
-                >
-                </v-text-field>
-              </v-col>
-            </v-row>
+                  
+                </div>            
           </div>
         </div>
     </v-container>
   
     <div class="container2 fluid">
-      <p class="add-title">Recently add</p>
-      <div class="slider">
-        <v-carousel>
-          <v-carousel-item
-            max="200px"
-            v-for="(item, i) in sliders"
-            :key="i"
-            :src="item.src"
-            reverse-transition="fade-transition"
-            transition="fade-transition"
-          >
-          </v-carousel-item>
-        </v-carousel>
+      <div class="parent-slider-div">
+        <p class="add-title">Recently add</p>
+        <div class="slider">
+          <v-carousel>
+            <v-carousel-item
+              max="200px"
+              v-for="(item, i) in sliders"
+              :key="i"
+              :src="item.src"
+              reverse-transition="fade-transition"
+              transition="fade-transition"
+            >
+            </v-carousel-item>
+          </v-carousel>
+        </div>
       </div>
+      
     </div>
     <div class="container3">
       <p class="all-title">All cinema</p>
+       <div class="py-4" justify="center" >
+         
+        <v-tabs
+            background-color="grey accent-4"
+            class="main-tabs elevation-6 my-1"
+            center-active
+            color="blue lighten-3"
+            grow
+            justify="center" align="center"
+        >
+            <v-tab
+              
+                v-for="(type, index) in types"
+                :key="index"
+                :class="[index === is_active ? 'tabs__nav_tab--active' : '']"
+              @click="activate(index)"
+                
+            >
+                {{ type.title }}
+            </v-tab>
+          </v-tabs> 
+          <div class="filed_div pt-5">
+            <v-text-field
+            outlined
+            color="white"
+            background-color="grey"
+            append-icon="mdi-movie-search-outline"
+            dense
+            label="Search ..."
+            placeholder="search"
+            v-model="search"
+            @keyup.enter="searchMovie()"
+          />
+          
+          </div>
+          
+        </div>
       <div class="cinema-card">
         <v-row>
           <v-col
@@ -138,6 +155,13 @@
           </div>
         </v-col>
       </v-row>
+      <v-overlay v-model="$store.state.overlay">
+        <v-progress-circular
+          :size="100"
+          color="amber"
+          indeterminate
+        ></v-progress-circular>
+      </v-overlay>
     </footer>
   </div>
 </v-container>
@@ -150,6 +174,8 @@ export default {
   components:{},
   data: () => {
     return {
+      is_active:0,
+      search: '',
       file_path: process.env.VUE_APP_FILE_URL,
       options: {
         page: 1,
@@ -169,20 +195,47 @@ export default {
   },
   async created() {
     await this.init();
+    await this.$store.dispatch("types/fetchActiveTypes");
+    this.types.reverse().push({"id": 0, "title": "Barchasi", "active": true, "createdAt": "2022-01-28T12:53:23.000Z", "updatedAt": "2022-02-10T10:28:58.000Z"})
+    this.types.reverse()
   },
   computed: {
+    content () {
+      return this.types[this.is_active]
+    },
     ...mapGetters({
       movies: "movies/getMovies",
       totalMovie: "movies/getTotalMovie",
+      types: "types/getActiveTypes"
     }),
   },
   methods: {
     async init() {
+      
       this.$overlay(true);
       await this.$store.dispatch("movies/fetchActiveMovies", {
         page: this.options.page,
       });
+    
+      this.$overlay(false)
     },
+    async activate (index) {
+      this.is_active = index
+      
+      await this.searchMovie();
+    },
+    async searchMovie(){
+      try {
+        this.$overlay(true)
+        let type_id =  this.types[this.is_active]
+        await this.$store.dispatch('movies/fetchActiveMovies', {type_id: type_id.id, search: this.search});
+      } catch (error) {
+         return this.$toast.error(error.response.data&&error.response.data.message || "Xatolik yuz berdi!!")
+      }finally{
+        this.$overlay(false)
+      }
+    },
+
     openVideoDialog(id){
       this.$router.push({
         name: 'OpenVideo',
@@ -211,23 +264,27 @@ export default {
   padding: 0 !important;
   font-size: 13px !important;
 }
-</style>
-<style src="../../styles/main-style.css">
-</style>
-<style>
-  .header-container{
-    
+.header-container{
     padding: 0 !important;
-    
     width: 100%;
     z-index: 10000;
   }
   .body-container{
     border-radius: 5px !important;
-    background-image: url("../../assets/bg-home.jpg") !important;
+    /* background-image: url("../../assets/bg-home.jpg") !important; */
     background-attachment: fixed;
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat, repeat;
   }
+  .tabs__nav_tab--active{
+    background-color: rgba(2, 214, 252, 0.664) !important;
+    color: white !important;
+    font-weight: 900 !important;
+    padding: -3px;
+    box-shadow: 0px 0px 10px rgb(252, 206, 2);
+    
+  }
+</style>
+<style src="../../styles/main-style.css">
 </style>

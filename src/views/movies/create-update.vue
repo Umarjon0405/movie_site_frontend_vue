@@ -24,7 +24,7 @@
                     <v-autocomplete
                         prepend-icon="mdi-directions-fork"
                         v-model="editingMovie.type_id"
-                        :items="items"
+                        :items="activeTypes"
                         required
                         item-text="title"
                         item-value="id"
@@ -59,6 +59,7 @@ const defaultMovie = {
     movie_img:"",
     description:"",
 }
+import { mapGetters } from 'vuex';
 export default {
     data(){
         return {
@@ -78,13 +79,26 @@ export default {
         }
     },
     computed:{
+        ...mapGetters({
+            activeTypes: "types/getActiveTypes"
+        }),
         cardTitle(){
             if (this.editingMovie.id) return "Filmni Tahrirlash"
             return "Filmni yuklash"
         },
         
     },
+    async created(){
+        await this.init();
+    }, 
     methods:{
+        async init(){
+            try {
+                await this.$store.dispatch('types/fetchActiveTypes')
+            } catch (error) {
+                return this.$toast.error(error.response.data&&error.response.data.message || "Xatolik yuz berdi")
+            }
+        },
         show(movie){
             this.editingMovie= {...movie}
             this.dialog = true
