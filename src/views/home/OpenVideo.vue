@@ -132,8 +132,9 @@
             </v-card>
           </v-col>
         </v-row>
+        {{movie}}
         <video
-          v-if="movie.movie_path && movie.movie_path.id"
+          v-if="movie.movie_path && movie.movie_path.id && active"
           class="videoPlay"
           id="myVideo"
           controls
@@ -184,7 +185,7 @@ export default {
   },
   data() {
     return {
-      dialog: false,
+      active: false,
       img_url: process.env.VUE_APP_FILE_URL,
       base_url: process.env.VUE_APP_FILE_URL + "api/movies/play_video",
       messages:[
@@ -210,9 +211,8 @@ export default {
           background-image: url('${this.img_url + this.movie.image_path}');
           background-size: cover;
           background-position: center;
-        `
-        console.log(style);
-      return style;
+        `;
+        return style;
       
     },
     ...mapGetters({
@@ -220,14 +220,17 @@ export default {
     }),
   },
   async created() {
+    
     await this.init();
+    
   },
   methods: {
     async init(){
       this.$overlay(true)
+      this.active = false
       await this.$store.dispatch("movies/show", this.id)
+      this.active = true
       this.$overlay(false)
-      
     },
 
   },

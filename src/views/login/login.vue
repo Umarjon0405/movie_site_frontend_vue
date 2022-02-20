@@ -68,7 +68,6 @@ export default {
         await this.$store.dispatch("login/signIn", this.user);
         this.$router.push("/admin");
       } catch (e) {
-          console.log(e);
         this.snackbar.show = true;
         this.snackbar.color = "error";
         this.snackbar.message = "Parol yoki foydalanuvchi nomi xato";

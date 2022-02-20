@@ -118,20 +118,15 @@ export default {
                 formData.append("movie_img", this.editingMovie.movie_img);
                 formData.append("type_id", this.editingMovie.type_id);
                 const response = await this.$store.dispatch('movies/createMovie', formData);
-                console.log(response);
                 this.$toast.success(response.data.message || "Malumot saqland")
                 this.clearDialog();
                 this.$overlay(false)
             } catch (error) {
                 this.clearDialog(); 
-                // console.log(error.data);
                return this.$toast.error(error.response.data.message || 'Xatolik yuz berdi');
             }
-        },
-        picFile(event){
-        //    this.editingMovie.movie = event.target.files[0];
-           console.log(this.editingMovie.movie);
         }
+    
         
     }
 }

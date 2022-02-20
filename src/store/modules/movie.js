@@ -7,12 +7,14 @@ const state = () => ({
         link:[]
     },
     params: {},
-    movie_to_play: {}
+    movie_to_play: {},
+    last_movie:[]
 })
 
 const getters = {
     getMovies: state => state.movie_data,
     getMovieToPlay: state => state.movie_to_play,
+    getLastMovie: state => state.last_movie,
     getTotalMovie: state => state.movie_data.meta&&state.movie_data.meta.last_page || 1
 }
 
@@ -38,6 +40,16 @@ const actions = {
                 }
             });
             commit("SET_MOVIES_DATA", {movies, params})
+            return Promise.resolve(movies)
+        } catch (error) {
+            console.log(error);
+            return Promise.reject(error)
+        }
+    },
+    async fetchLast({commit}) {
+        try {
+            const { data: movies } = await axios.get('/movies/get_last');
+            commit("SET_LAST_MOVIE_DATA", movies)
             return Promise.resolve(movies)
         } catch (error) {
             console.log(error);
@@ -70,6 +82,9 @@ const mutations = {
     },
     SET_MOVIE_TO_PLAY: (state, response) => {
         state.movie_to_play = response
+    },
+    SET_LAST_MOVIE_DATA: (state, movies) => {
+        state.last_movie = movies.data
     }
 }
 
