@@ -22,15 +22,16 @@
     </v-container>
   
     <div class="container2 fluid">
+      
       <div class="parent-slider-div">
         <p class="add-title">Recently add</p>
         <div class="slider">
           <v-carousel>
             <v-carousel-item
               max="200px"
-              v-for="(item, i) in sliders"
+              v-for="(lastMovie, i) in lastMovies"
               :key="i"
-              :src="item.src"
+              :src="file_path + lastMovie.image_path"
               reverse-transition="fade-transition"
               transition="fade-transition"
             >
@@ -193,11 +194,11 @@ export default {
   watch: {
     "options.page": { handler: "init" },
   },
-  async created() {
+  async created() {    
     await this.init();
-    await this.$store.dispatch("types/fetchActiveTypes");
-    this.types.reverse().push({"id": 0, "title": "Barchasi", "active": true, "createdAt": "2022-01-28T12:53:23.000Z", "updatedAt": "2022-02-10T10:28:58.000Z"})
-    this.types.reverse()
+    await this.fetchActiveTypes();
+    this.pushToType()
+    
   },
   computed: {
     content () {
@@ -205,18 +206,27 @@ export default {
     },
     ...mapGetters({
       movies: "movies/getMovies",
+      lastMovies: "movies/getLastMovie",
       totalMovie: "movies/getTotalMovie",
       types: "types/getActiveTypes"
     }),
   },
   methods: {
+    pushToType(){
+      this.types.reverse().push({"id": 0, "title": "Barchasi", "active": true, "createdAt": "2022-01-28T12:53:23.000Z", "updatedAt": "2022-02-10T10:28:58.000Z"})
+      this.types.reverse()
+    },
+    async fetchActiveTypes(){
+      this.$overlay(true)
+      await this.$store.dispatch("types/fetchActiveTypes")
+      this.$overlay(false)
+    },
     async init() {
-      
       this.$overlay(true);
       await this.$store.dispatch("movies/fetchActiveMovies", {
         page: this.options.page,
       });
-    
+      await this.$store.dispatch("movies/fetchLast");
       this.$overlay(false)
     },
     async activate (index) {
